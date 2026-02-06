@@ -30,7 +30,7 @@
 
 /* Background layer */
 .aurora-bg {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 0;
 
@@ -51,4 +51,13 @@
 .content {
   position: relative;
   z-index: 1;
+}
+
+#paste_container {
+  border: 1px solid black;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  margin-top: 100px;
+  margin-left: 100px;
 }
