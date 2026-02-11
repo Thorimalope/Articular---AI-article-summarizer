@@ -17,12 +17,17 @@
       <div class="aurora-bg" aria-hidden="true"></div>
       <main class="content">
         <div class="header">Articular</div>
-        <nav id="navbar"></nav>
-        <div id="paste_container">
-          <label for="myfile">Upload:</label>
-          <input type="file" id="myfile" name="myfile" />
+        <div class="inner_content">
+          <nav id="navbar"></nav>
+          <div class="nested_flex">
+            <div id="paste_container">
+              <label for="myfile">Upload:</label>
+              <input type="file" id="myfile" name="myfile" />
+            </div>
+            <div id="summary_container"></div>
+            <div id="sentiment_container"></div>
+          </div>
         </div>
-        <!-- <div id="summary_container"></div> -->
       </main>
       <script src="main.js"></script>
     </div>
