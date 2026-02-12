@@ -17,7 +17,7 @@ body {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(7.4px);
   -webkit-backdrop-filter: blur(7.4px);
-  border: 1px solid rgba(255, 255, 255, 0.29);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.29);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,9 +62,12 @@ body {
 }
 
 .nested_flex {
+  flex: 1;
   display: flex;
-  gap: 50px;
   flex-wrap: wrap;
+  gap: 50px;
+  padding: 50px 0 0 100px;
+  align-content: flex-start;
 }
 
 /* Navbar */
@@ -76,7 +79,8 @@ body {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(7.3px);
   -webkit-backdrop-filter: blur(7.3px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
 }
 
 /* Containers */
@@ -86,8 +90,6 @@ body {
   height: 50px;
   padding: 5px;
   border-radius: 6px;
-  margin-top: 50px;
-  margin-left: 100px;
   color: white;
   background: transparent;
   background: rgba(255, 255, 255, 0.11);
@@ -116,11 +118,10 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 6px;
   transition: background 0.2s ease;
-  margin-top: 50px;
 }
 
 #sentiment_container {
-  width: 500px;
+  width: 812px;
   height: 250px;
   background: rgba(255, 255, 255, 0.11);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -129,4 +130,5 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 6px;
   transition: background 0.2s ease;
+  /* flex-basis: 100%; */
 }
