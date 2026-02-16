@@ -12,25 +12,108 @@
     />
     <title>Articular</title>
   </head>
+
   <body>
     <div class="page">
       <div class="aurora-bg" aria-hidden="true"></div>
-      <main class="content">
-        <div class="header">Articular</div>
-        <div class="inner_content">
-          <nav id="navbar">
-            <p>Summaries</p>
-          </nav>
-          <div class="nested_flex">
-            <div id="paste_container">
-              <label for="myfile">Upload:</label>
-              <input type="file" id="myfile" name="myfile" />
-            </div>
-            <div id="summary_container"></div>
-            <div id="sentiment_container"></div>
-          </div>
+
+      <header class="topbar glass">
+        <div class="brand">Articular</div>
+
+        <div class="topbar-actions">
+          <button class="ghost-btn" id="clearBtn" type="button">Clear</button>
+          <button class="primary-btn" id="analyzeBtn" type="button">
+            Analyze
+          </button>
         </div>
-      </main>
+      </header>
+
+      <div class="layout">
+        <aside class="sidebar glass" id="navbar">
+          <div class="sidebar-title">Summaries</div>
+
+          <!-- Optional: history list later -->
+          <div class="sidebar-hint">
+            Your saved summaries will show up here.
+          </div>
+        </aside>
+
+        <main class="main">
+          <section class="panel glass">
+            <div class="panel-header">
+              <h2 class="panel-title">Input</h2>
+              <p class="panel-subtitle">Paste an article, or upload a file.</p>
+            </div>
+
+            <div class="input-row">
+              <label class="file-pill" for="myfile">
+                <span>Upload</span>
+                <input type="file" id="myfile" name="myfile" />
+              </label>
+
+              <div class="meta" id="articleMeta">
+                <span class="chip" id="wordCount">0 words</span>
+                <span class="chip" id="charCount">0 chars</span>
+              </div>
+            </div>
+
+            <!-- If you're using paste, you'll likely put a textarea here later -->
+            <div id="paste_container" class="dropzone">
+              <div class="dropzone-title">Paste your article here</div>
+              <div class="dropzone-hint">
+                (We’ll swap this for a textarea in the next step.)
+              </div>
+            </div>
+
+            <div class="status-row">
+              <div class="status" id="statusText">Ready.</div>
+              <div class="spinner" id="spinner" aria-hidden="true"></div>
+            </div>
+          </section>
+
+          <section class="grid">
+            <section class="panel glass" id="summary_container">
+              <div class="panel-header">
+                <h2 class="panel-title">Summary</h2>
+                <p class="panel-subtitle">
+                  Your generated summary appears here.
+                </p>
+              </div>
+
+              <div class="panel-body" id="summaryText">No summary yet.</div>
+            </section>
+
+            <section class="panel glass" id="sentiment_container">
+              <div class="panel-header sentiment-header">
+                <div>
+                  <h2 class="panel-title">Sentiment</h2>
+                  <p class="panel-subtitle">Overall emotional tone.</p>
+                </div>
+
+                <div class="sentiment-badge neutral" id="sentimentBadge">
+                  Neutral
+                </div>
+              </div>
+
+              <div class="panel-body">
+                <div class="sentiment-line">
+                  <div class="sentiment-label">Confidence</div>
+                  <div class="sentiment-value" id="sentimentScore">—</div>
+                </div>
+
+                <div class="sentiment-line">
+                  <div class="sentiment-label">Notes</div>
+                  <div class="sentiment-value muted">
+                    We can analyze the article or the summary (you’ll choose
+                    later).
+                  </div>
+                </div>
+              </div>
+            </section>
+          </section>
+        </main>
+      </div>
+
       <script src="main.js"></script>
     </div>
   </body>
