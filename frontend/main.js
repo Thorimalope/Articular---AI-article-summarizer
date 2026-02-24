@@ -13,11 +13,13 @@ const spinner = document.getElementById("spinner");
 
 const dropzone = document.getElementById("paste_container");
 
+const articleInput = document.getElementById("articleInput");
+
 // We'll temporarily simulate input
-let articleText = "This is a test article about AI transforming industries.";
 
 // ===== BUTTON EVENTS =====
 analyzeBtn.addEventListener("click", async () => {
+  const articleText = articleInput.value;
   if (!articleText.trim()) {
     alert("Please provide text first.");
     return;
