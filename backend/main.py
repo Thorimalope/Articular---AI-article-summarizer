@@ -1,6 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from transformers import pipeline
+
+print("Loading summarization model...")
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+print("Model loaded successfully.")
+
+print("Loading sentiment model...")
+sentiment_analyzer = pipeline("sentiment-analysis")
+print("Sentiment model loaded successfully.")
 
 app = FastAPI(title="Article Summarizer & Sentiment API")
 
@@ -22,7 +31,6 @@ def health():
 
 @app.post("/analyze")
 def analyze(req: AnalyzeRequest):
-    # TEMP: mock response so you can wire up the frontend first
     text = (req.text or "").strip()
     word_count = len(text.split())
 
@@ -32,10 +40,28 @@ def analyze(req: AnalyzeRequest):
             "article_word_count": word_count,
         }
 
+    # Generate summary
+    result = summarizer(
+        text,
+        max_length=180,
+        min_length=60,
+        num_beams=4,
+        length_penalty=1.2,
+        early_stopping=True,
+    )
+
+    summary_text = result[0]["summary_text"]
+    summary_word_count = len(summary_text.split())
+
+    sentiment_result = sentiment_analyzer(summary_text)[0]
+
+    sentiment_label = sentiment_result["label"]
+    sentiment_score = float(sentiment_result["score"])
+
     return {
         "article_word_count": word_count,
-        "summary": "Mock summary (backend is connected). Next we’ll plug in the real summarizer model.",
-        "summary_word_count": 14,
-        "sentiment_label": "Neutral",
-        "sentiment_score": 0.55,
+        "summary": summary_text,
+        "summary_word_count": summary_word_count,
+        "sentiment_label": sentiment_label,
+        "sentiment_score": round(sentiment_score, 3),
     }
