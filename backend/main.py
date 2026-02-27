@@ -53,15 +53,23 @@ def analyze(req: AnalyzeRequest):
     summary_text = result[0]["summary_text"]
     summary_word_count = len(summary_text.split())
 
+    # --- SENTIMENT ANALYSIS ---
     sentiment_result = sentiment_analyzer(summary_text)[0]
 
     sentiment_label = sentiment_result["label"]
     sentiment_score = float(sentiment_result["score"])
 
+    # Debug print (helps confirm backend works)
+    print("Sentiment result:", sentiment_result)
+
     return {
         "article_word_count": word_count,
         "summary": summary_text,
         "summary_word_count": summary_word_count,
-        "sentiment_label": sentiment_label,
-        "sentiment_score": round(sentiment_score, 3),
+
+        # ✅ CLEAN STRUCTURE
+        "sentiment": {
+            "label": sentiment_label,
+            "confidence": round(sentiment_score, 3),
+        },
     }

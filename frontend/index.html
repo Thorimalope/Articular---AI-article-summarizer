@@ -4,12 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
     <link
       href="https://fonts.googleapis.com/css2?family=Bungee&display=swap"
       rel="stylesheet"
     />
+
     <title>Articular</title>
   </head>
 
@@ -17,28 +20,36 @@
     <div class="page">
       <div class="aurora-bg" aria-hidden="true"></div>
 
+      <!-- ================= TOP BAR ================= -->
       <header class="topbar glass">
         <div class="brand">Articular</div>
 
         <div class="topbar-actions">
           <button class="ghost-btn" id="clearBtn" type="button">Clear</button>
+
           <button class="primary-btn" id="analyzeBtn" type="button">
             Analyze
           </button>
         </div>
       </header>
 
+      <!-- ================= LAYOUT ================= -->
       <div class="layout">
+        <!-- ===== SIDEBAR (SAVED SUMMARIES) ===== -->
         <aside class="sidebar glass" id="navbar">
           <div class="sidebar-title">Summaries</div>
 
-          <!-- Optional: history list later -->
           <div class="sidebar-hint">
             Your saved summaries will show up here.
           </div>
+
+          <!-- ✅ JS injects saved summaries here -->
+          <div id="savedSummaries" class="saved-summaries"></div>
         </aside>
 
+        <!-- ================= MAIN ================= -->
         <main class="main">
+          <!-- ===== INPUT PANEL ===== -->
           <section class="panel glass">
             <div class="panel-header">
               <h2 class="panel-title">Input</h2>
@@ -57,7 +68,6 @@
               </div>
             </div>
 
-            <!-- If you're using paste, you'll likely put a textarea here later -->
             <textarea
               id="articleInput"
               placeholder="Paste your article here..."
@@ -69,7 +79,9 @@
             </div>
           </section>
 
+          <!-- ===== RESULTS GRID ===== -->
           <section class="grid">
+            <!-- ===== SUMMARY ===== -->
             <section class="panel glass" id="summary_container">
               <div class="panel-header">
                 <h2 class="panel-title">Summary</h2>
@@ -81,6 +93,7 @@
               <div class="panel-body" id="summaryText">No summary yet.</div>
             </section>
 
+            <!-- ===== SENTIMENT ===== -->
             <section class="panel glass" id="sentiment_container">
               <div class="panel-header sentiment-header">
                 <div>
