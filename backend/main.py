@@ -22,7 +22,7 @@ def load_models():
     print("Loading summarization model...")
     summarizer = pipeline(
         "summarization",
-        model="facebook/bart-large-cnn"
+        model="sshleifer/distilbart-cnn-12-6"
     )
     print("Summarization model loaded.")
 
