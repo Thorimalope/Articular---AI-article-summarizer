@@ -3,32 +3,64 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from transformers import pipeline
 
-print("Loading summarization model...")
-summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
-print("Model loaded successfully.")
-
-print("Loading sentiment model...")
-sentiment_analyzer = pipeline("sentiment-analysis")
-print("Sentiment model loaded successfully.")
-
 app = FastAPI(title="Article Summarizer & Sentiment API")
 
-# Allow your frontend to call the API (fine for dev)
+# -----------------------------
+# GLOBAL MODEL VARIABLES
+# -----------------------------
+summarizer = None
+sentiment_analyzer = None
+
+
+# -----------------------------
+# LOAD MODELS ON STARTUP
+# -----------------------------
+@app.on_event("startup")
+def load_models():
+    global summarizer, sentiment_analyzer
+
+    print("Loading summarization model...")
+    summarizer = pipeline(
+        "summarization",
+        model="facebook/bart-large-cnn"
+    )
+    print("Summarization model loaded.")
+
+    print("Loading sentiment model...")
+    sentiment_analyzer = pipeline("sentiment-analysis")
+    print("Sentiment model loaded.")
+
+
+# -----------------------------
+# CORS
+# -----------------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # later we can lock this down
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+
+# -----------------------------
+# REQUEST MODEL
+# -----------------------------
 class AnalyzeRequest(BaseModel):
     text: str
 
+
+# -----------------------------
+# HEALTH CHECK
+# -----------------------------
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
+
+# -----------------------------
+# ANALYZE ENDPOINT
+# -----------------------------
 @app.post("/analyze")
 def analyze(req: AnalyzeRequest):
     text = (req.text or "").strip()
@@ -40,7 +72,7 @@ def analyze(req: AnalyzeRequest):
             "article_word_count": word_count,
         }
 
-    # Generate summary
+    # Summary
     result = summarizer(
         text,
         max_length=180,
@@ -53,23 +85,15 @@ def analyze(req: AnalyzeRequest):
     summary_text = result[0]["summary_text"]
     summary_word_count = len(summary_text.split())
 
-    # --- SENTIMENT ANALYSIS ---
+    # Sentiment
     sentiment_result = sentiment_analyzer(summary_text)[0]
-
-    sentiment_label = sentiment_result["label"]
-    sentiment_score = float(sentiment_result["score"])
-
-    # Debug print (helps confirm backend works)
-    print("Sentiment result:", sentiment_result)
 
     return {
         "article_word_count": word_count,
         "summary": summary_text,
         "summary_word_count": summary_word_count,
-
-        # ✅ CLEAN STRUCTURE
         "sentiment": {
-            "label": sentiment_label,
-            "confidence": round(sentiment_score, 3),
+            "label": sentiment_result["label"],
+            "confidence": round(float(sentiment_result["score"]), 3),
         },
     }
