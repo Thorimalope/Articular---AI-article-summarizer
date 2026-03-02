@@ -54,14 +54,18 @@ def analyze(req: AnalyzeRequest):
         summary_text = sum_data[0]["summary_text"]
 
         # Sentiment
-        sent_response = httpx.post(SENTIMENT_URL, headers=HEADERS, json={
-            "inputs": summary_text
-        }, timeout=60)
+# Sentiment
+sent_response = httpx.post(SENTIMENT_URL, headers=HEADERS, json={
+    "inputs": summary_text
+}, timeout=60)
 
-        try:
-            sent_data = sent_response.json()
-        except json.JSONDecodeError:
-            return {"error": "Sentiment model returned an empty response, please try again."}
+print("Sentiment status:", sent_response.status_code)
+print("Sentiment raw:", sent_response.text)
+
+try:
+    sent_data = sent_response.json()
+except json.JSONDecodeError:
+    return {"error": "Sentiment model returned an empty response, please try again."}
 
         if isinstance(sent_data, dict) and "error" in sent_data:
             return {"error": f"Sentiment error: {sent_data['error']}"}
