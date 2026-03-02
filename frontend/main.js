@@ -44,6 +44,11 @@ analyzeBtn.addEventListener("click", async () => {
 
     const data = await response.json();
 
+    if (data.error) {
+      setStatus(data.error);
+      return;
+    }
+
     updateUI(data);
 
     saveSummary({
@@ -59,7 +64,7 @@ analyzeBtn.addEventListener("click", async () => {
     setStatus("Analysis complete.");
   } catch (error) {
     console.error(error);
-    setStatus("Something went wrong.");
+    setStatus("Something went wrong. Please try again.");
   } finally {
     setLoading(false);
   }
@@ -144,14 +149,12 @@ function renderSavedSummaries() {
       </div>
     `;
 
-    // CLICK → LOAD INTO MAIN UI
     card.querySelector(".saved-text").addEventListener("click", () => {
       summaryText.textContent = item.summary;
       sentimentBadge.textContent = item.sentiment;
       sentimentScore.textContent = item.confidence;
     });
 
-    // DELETE BUTTON
     card.querySelector(".delete-btn").addEventListener("click", (e) => {
       e.stopPropagation();
       deleteSummary(index);
