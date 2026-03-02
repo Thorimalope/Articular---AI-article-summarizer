@@ -43,10 +43,10 @@ def analyze(req: AnalyzeRequest):
             "parameters": {"max_length": 180, "min_length": 60}
         }, timeout=120)
 
-        try:
-            sum_data = sum_response.json()
-        except json.JSONDecodeError:
-            return {"error": "Summarization model returned an empty response, please try again."}
+        print("Sum status:", sum_response.status_code)
+        print("Sum raw:", sum_response.text)
+
+        sum_data = sum_response.json()
 
         if isinstance(sum_data, dict) and "error" in sum_data:
             return {"error": f"Summarization error: {sum_data['error']}"}
@@ -54,18 +54,14 @@ def analyze(req: AnalyzeRequest):
         summary_text = sum_data[0]["summary_text"]
 
         # Sentiment
-# Sentiment
-sent_response = httpx.post(SENTIMENT_URL, headers=HEADERS, json={
-    "inputs": summary_text
-}, timeout=60)
+        sent_response = httpx.post(SENTIMENT_URL, headers=HEADERS, json={
+            "inputs": summary_text
+        }, timeout=60)
 
-print("Sentiment status:", sent_response.status_code)
-print("Sentiment raw:", sent_response.text)
+        print("Sent status:", sent_response.status_code)
+        print("Sent raw:", sent_response.text)
 
-try:
-    sent_data = sent_response.json()
-except json.JSONDecodeError:
-    return {"error": "Sentiment model returned an empty response, please try again."}
+        sent_data = sent_response.json()
 
         if isinstance(sent_data, dict) and "error" in sent_data:
             return {"error": f"Sentiment error: {sent_data['error']}"}
@@ -84,3 +80,6 @@ except json.JSONDecodeError:
 
     except httpx.TimeoutException:
         return {"error": "The AI model is warming up, please try again in 30 seconds."}
+    except Exception as e:
+        print("Unexpected error:", str(e))
+        return {"error": f"Unexpected error: {str(e)}"}
