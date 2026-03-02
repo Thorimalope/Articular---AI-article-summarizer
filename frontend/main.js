@@ -1,5 +1,5 @@
 console.log("we live baby!");
-const API_URL = "ai-article-summarizer-production.up.railway.app"
+const API_URL = "https://ai-article-summarizer-production.up.railway.app"
 
 // ===== DOM REFERENCES =====
 const analyzeBtn = document.getElementById("analyzeBtn");
