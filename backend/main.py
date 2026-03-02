@@ -40,11 +40,21 @@ def analyze(req: AnalyzeRequest):
         "inputs": text,
         "parameters": {"max_length": 180, "min_length": 60}
     }, timeout=60)
-    summary_text = sum_response.json()[0]["summary_text"]
+    
+    sum_data = sum_response.json()
+    if isinstance(sum_data, dict) and "error" in sum_data:
+        return {"error": f"Summarization model error: {sum_data['error']}"}
+    
+    summary_text = sum_data[0]["summary_text"]
 
     # Sentiment
     sent_response = httpx.post(SENTIMENT_URL, headers=HEADERS, json={"inputs": summary_text}, timeout=30)
-    sentiment = sent_response.json()[0][0]
+    
+    sent_data = sent_response.json()
+    if isinstance(sent_data, dict) and "error" in sent_data:
+        return {"error": f"Sentiment model error: {sent_data['error']}"}
+    
+    sentiment = sent_data[0][0]
 
     return {
         "article_word_count": word_count,
