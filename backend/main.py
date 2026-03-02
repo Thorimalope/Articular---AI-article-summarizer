@@ -1,4 +1,5 @@
 import os
+import json
 import httpx
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -42,18 +43,28 @@ def analyze(req: AnalyzeRequest):
             "parameters": {"max_length": 180, "min_length": 60}
         }, timeout=120)
 
-        sum_data = sum_response.json()
+        try:
+            sum_data = sum_response.json()
+        except json.JSONDecodeError:
+            return {"error": "Summarization model returned an empty response, please try again."}
+
         if isinstance(sum_data, dict) and "error" in sum_data:
-            return {"error": f"Summarization model error: {sum_data['error']}"}
+            return {"error": f"Summarization error: {sum_data['error']}"}
 
         summary_text = sum_data[0]["summary_text"]
 
         # Sentiment
-        sent_response = httpx.post(SENTIMENT_URL, headers=HEADERS, json={"inputs": summary_text}, timeout=60)
+        sent_response = httpx.post(SENTIMENT_URL, headers=HEADERS, json={
+            "inputs": summary_text
+        }, timeout=60)
 
-        sent_data = sent_response.json()
+        try:
+            sent_data = sent_response.json()
+        except json.JSONDecodeError:
+            return {"error": "Sentiment model returned an empty response, please try again."}
+
         if isinstance(sent_data, dict) and "error" in sent_data:
-            return {"error": f"Sentiment model error: {sent_data['error']}"}
+            return {"error": f"Sentiment error: {sent_data['error']}"}
 
         sentiment = sent_data[0][0]
 
