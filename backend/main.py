@@ -20,14 +20,19 @@ def load_models():
     global summarizer, sentiment_analyzer
 
     print("Loading summarization model...")
-    summarizer = pipeline(
-        "summarization",
-        model="sshleifer/distilbart-cnn-12-6"
-    )
+summarizer = pipeline(
+    "summarization",
+    model="sshleifer/distilbart-cnn-12-6",
+    device=-1,          # force CPU
+    framework="pt"
+)
     print("Summarization model loaded.")
 
     print("Loading sentiment model...")
-    sentiment_analyzer = pipeline("sentiment-analysis")
+    sentiment_analyzer = pipeline(
+    "sentiment-analysis",
+    device=-1
+)
     print("Sentiment model loaded.")
 
 
