@@ -1,4 +1,5 @@
 console.log("we live baby!");
+const API_URL = "ai-article-summarizer-production.up.railway.app"
 
 // ===== DOM REFERENCES =====
 const analyzeBtn = document.getElementById("analyzeBtn");
@@ -33,7 +34,7 @@ analyzeBtn.addEventListener("click", async () => {
   try {
     setLoading(true);
 
-    const response = await fetch("http://127.0.0.1:8000/analyze", {
+    const response = await fetch(`${API_URL}/analyze`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
